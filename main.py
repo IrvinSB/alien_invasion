@@ -1,6 +1,6 @@
-from alien_game.core import start_game
-from alien_game.utils import shout
+from alien_game.core import AlienInvasion
 
 if __name__ == "__main__":
-    start_game()
-    shout("Run for your life!")
+    #make a game instance, and run the game.
+    ai = AlienInvasion()
+    ai.run_game()
