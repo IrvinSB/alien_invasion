@@ -6,5 +6,11 @@ class Settings:
         self.screen_height = 800
         self.bg_color = (0,8,20)
         self.ship_speed = 2
+        #Bullet settings
+        self.bullet_speed = 2.0
+        self.bullet_width = 3
+        self.bullet_height = 15
+        self.bullet_color = (255,255,255)
+        self.bullet_allowed = 4
 
 
