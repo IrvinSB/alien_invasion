@@ -9,7 +9,7 @@ class Ship:
 
         #load the ship image and get its rect
         self.image = pygame.image.load('alien_game\images\ship.bmp')
-        self.image = pygame.transform.smoothscale(self.image, (54, 54))
+        self.image = pygame.transform.smoothscale(self.image, (80, 80))
 
 
         self.rect = self.image.get_rect()
@@ -61,4 +61,20 @@ class Bullet(Sprite):
         """Draw the bullet to the screen"""
         pygame.draw.rect(self.screen, self.color, self.rect)
 
+class Alien(Sprite):
+    """Class to manage a single alien in the fleet of aliens"""
+    def __init__(self,ai_game):
+        super().__init__()
+        self.screen = ai_game.screen
 
+        #load the alien image and set its rect attribute
+        self.image = pygame.image.load(r'alien_game\images\alien.bmp')
+        self.image = pygame.transform.smoothscale(self.image, (90, 90))
+        self.rect = self.image.get_rect()
+
+        #start each new alien near the top left opf the screen
+        self.rect.x = self.rect.width
+        self.rect.y = self.rect.height 
+
+        #store the aliens exact horizontal position
+        self.x = float(self.rect.x)

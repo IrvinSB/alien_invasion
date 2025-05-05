@@ -2,7 +2,7 @@
 import sys
 import pygame
 from alien_game.settings import Settings
-from alien_game.utils import Ship , Bullet
+from alien_game.utils import Ship , Bullet , Alien
 
 
 class AlienInvasion:
@@ -21,10 +21,12 @@ class AlienInvasion:
         self.settings.screen_height =self.screen.get_rect().height
         pygame.display.set_caption("Alien Invasion")
         self.ship = Ship(self)
+        self.aliens = pygame.sprite.Group()
         self.bullets = pygame.sprite.Group()
         self.bg_image = pygame.image.load(r"alien_game\images\bg_img.bmp")
         self.bg_image = pygame.transform.smoothscale(self.bg_image, self.screen.get_size())
         #self.bg_color = (230,230,230)
+        self._create_fleet()
         
         
 
@@ -76,8 +78,27 @@ class AlienInvasion:
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = False
 
+    def _create_fleet(self):
+        """Create aliens"""
+        alien = Alien(self)
+        alien_width,alien_height = alien.rect.size
 
+        current_x = alien_width
+        current_y = alien_height -60
+        while current_y <(self.settings.screen_height - 4*alien_height):
+            while current_x < (self.settings.screen_width - 2*alien_width):
+                self._create_alien(current_x,current_y)
+                current_x += 2*alien_width
+            current_x = alien_width
+            current_y += 1.1*alien_height
         
+    def _create_alien(self, x_position, y_position):
+        new_alien = Alien(self)
+        new_alien.x = x_position
+        new_alien.rect.x = x_position
+        new_alien.rect.y = y_position
+        self.aliens.add(new_alien)
+
 
     def _update_screen(self):
         """Redraw the screen during each pass through the loop"""
@@ -85,6 +106,7 @@ class AlienInvasion:
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         self.ship.blitme() 
+        self.aliens.draw(self.screen)
 
         #Make the most recently drawn screen visible.
         pygame.display.flip()
@@ -95,3 +117,4 @@ class AlienInvasion:
         if len(self.bullets) < self.settings.bullet_allowed:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
+
