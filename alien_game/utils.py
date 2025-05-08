@@ -8,7 +8,7 @@ class Ship:
         self.screen_rect= ai_game.screen.get_rect()
 
         #load the ship image and get its rect
-        self.image = pygame.image.load('alien_game\images\ship.bmp')
+        self.image = pygame.image.load(r'alien_game\images\ship.bmp')
         self.image = pygame.transform.smoothscale(self.image, (80, 80))
 
 
@@ -32,6 +32,10 @@ class Ship:
         if self.moving_left and self.rect.left > 0:
             self.rect.x -= self.settings.ship_speed
             #print(f"left Ship position: {self.rect.x}")
+
+    def center_ship(self):
+        self.rect.midbottom = self.screen_rect.midbottom
+        self.x =float(self.rect.x)
 
 class Bullet(Sprite):
     """A class to manage bullets fired"""
@@ -66,6 +70,7 @@ class Alien(Sprite):
     def __init__(self,ai_game):
         super().__init__()
         self.screen = ai_game.screen
+        self.settings = ai_game.settings
 
         #load the alien image and set its rect attribute
         self.image = pygame.image.load(r'alien_game\images\alien.bmp')
@@ -78,3 +83,21 @@ class Alien(Sprite):
 
         #store the aliens exact horizontal position
         self.x = float(self.rect.x)
+    def update(self):
+        """Move the alien to the right"""
+        self.x += self.settings.alien_speed  * self.settings.fleet_direction
+        self.rect.x = self.x
+
+    def check_edges(self):
+        """Return true if the aliens reach the edge"""
+        screen_rect = self.screen.get_rect()
+        return (self.rect.right >= screen_rect.right) or (self.rect.left <=0)
+    
+class GameStats:
+    """Track statistics for alien invasion"""
+    def __init__(self,ai_game):
+        self.settings =ai_game.settings
+        self.reset_stats()
+
+    def reset_stats(self):
+        self.ships_left = self.settings.ship_limit
